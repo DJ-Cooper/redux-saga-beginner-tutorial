@@ -7,6 +7,11 @@
  * saga middleware. The yielded objects are a kind of instruction to be
  * interpreted by the middleware.
  *
+ *    Generator functions: function*
+ *    returns a generator object (yields sequence of values)
+ *      Generator.next() = yielded value
+ *      Generator.return() = returns value and finishes generator.
+ *
  * When a Promise is yielded to the middleware, the middleware will suspend the
  * Saga until until the Promise completes.
  *
@@ -24,9 +29,9 @@
  * fulfilled.
  */
 
-import { put, takeEvery, all } from 'redux-saga/effects'
+import { put, takeEvery, all, call } from 'redux-saga/effects'
 
-const delay = ms => new Promise(res => setTimeout(res, ms))
+export const delay = ms => new Promise(res => setTimeout(res, ms))
 
 function* helloSaga() {
   console.log('Hello Sagas!')
@@ -35,10 +40,11 @@ function* helloSaga() {
 /**
  * incrementAsync Saga sleeps for 1 second via the call to delay(1000),
  * then dispatches an INCREMENT action.
+ * yield [promise()]
  */
 
-function* incrementAsync() {
-  yield delay(1000)
+export function* incrementAsync() {
+  yield call(delay, 1000)
   yield put({ type: 'INCREMENT' })
 }
 

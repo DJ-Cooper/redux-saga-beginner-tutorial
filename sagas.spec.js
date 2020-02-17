@@ -59,5 +59,13 @@ test('incrementAsync Saga test', assert => {
     'incrementAsync Saga must be done'
   )
 
+  const iterator = fetchProducts()
+
+  assert.deepEqual(
+    iterator.next().value,
+    call(Api.fetch, '/products'),
+    'fetchProducts should yield an Effect call(Api.fetch, ./products)'
+  )
+
   assert.end()
 })

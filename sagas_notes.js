@@ -1,5 +1,6 @@
 /**
  * Milestone: 2.3 completed
+ * Milestone: 2.5 completed, Advanced Concepts next
  *
  * We create a delay function that returns a Promise that will resolve after a
  * specified number of milliseconds. We'll use this function to block
@@ -173,3 +174,37 @@ function* fetchProducts() {
 function* watchFetchProducts() {
     yield takeEvery('PRODUCTS_REQUESTED', fetchProducts)
 }
+
+/**
+ * You aren't forced to handle API errors inside try/catch blocks. You
+ * can also make your API service return a normal value with some error
+ * flag on it. For example, you can catch Promise rejections and map
+ * them to an object with an error field.
+ *
+ * Errors in forked tasks bubble up to their parents until caught or
+ * reaches Root Saga.
+ *
+ * Use onError hook to report an exception, inform user and terminate app.
+ * onError is last resort for handling unexpected errors.
+ */
+
+function fetchProductsApi() {
+    return Api.fetch('/products')
+        .then(response => ({ response }))
+        .catch(error => ({ error }))
+}
+
+/**
+ * triggering Side Effects from inside a Saga is always done by yielding some
+ * declarative Effect.
+ *
+ * What a Saga does is compose all those Effects together to implement the desired
+ * control flow. The most basic example is to sequence yielded Effects by putting the
+ * yields one after another.
+ *
+ * Using Effects like call and put, combined with high level APIs like takeEvery
+ * allows us to achieve the same things as redux-thunk, but with testability
+ *
+ * Saga has more powerful Effects that let you express complex control flows while
+ * still allowing the same testability benefit.
+ */

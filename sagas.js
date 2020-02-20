@@ -48,13 +48,13 @@ export const Api = {
     }),
 }
 
-function* watchFetchProducts() {
-    yield takeEvery('PRODUCTS_REQUESTED', fetchProducts)
-}
-
 export function* fetchProducts() {
-    const products = yield call(Api.fetch, './products')
-    console.log(products)
+    try {
+        const products = yield call(Api.fetch, '/products')
+        yield put({ type: 'PRODUCTS_RECEIVED', products })
+    } catch (error) {
+        yield put({ type: 'PRODUCTS_REQUEST_FAILED', error })
+    }
 }
 
 export default function* rootSaga() {

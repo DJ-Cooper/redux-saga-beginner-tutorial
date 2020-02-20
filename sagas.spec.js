@@ -39,7 +39,7 @@ import { incrementAsync, delay, Api, fetchProducts } from './sagas'
  */
 
 test('fetchProducts Saga test', assert => {
-  const iterator = fetchProducts()
+    const iterator = fetchProducts()
 
     assert.deepEqual(
         iterator.next().value,
@@ -50,46 +50,20 @@ test('fetchProducts Saga test', assert => {
     const products = {}
 
     assert.deepEqual(
-      iterator.next(products).value,
-      put({ type: 'PRODUCTS_RECEIVED', products}),
-      'fetchProducts should yield an effect put({ type: PRODUCTS_RECEIVED, products })'
+        iterator.next(products).value,
+        put({ type: 'PRODUCTS_RECEIVED', products }),
+        'fetchProducts should yield an effect put({ type: PRODUCTS_RECEIVED, products })'
     )
 
-    console.log('test running');
-
-    assert.end()
-}
-
-/*
-test('incrementAsync Saga test', assert => {
-    const gen = incrementAsync()
+    const error = {}
 
     assert.deepEqual(
-        gen.next().value,
-        call(delay, 1000),
-        'incrementAsync Saga must call delay(1000)'
+        iterator.throw(error).value,
+        put({ type: 'PRODUCTS_REQUEST_FAILED', error }),
+        "fetchProducts should yield an Effect put({ type: 'PRODUCTS_REQUEST_FAILED', error})"
     )
 
-    assert.deepEqual(
-        gen.next().value,
-        put({ type: 'INCREMENT' }),
-        'incrementAsync Saga must dispatch an INCREMENT action'
-    )
-
-    assert.deepEqual(
-        gen.next(),
-        { done: true, value: undefined },
-        'incrementAsync Saga must be done'
-    )
-
-    const iterator = fetchProducts()
-
-    assert.deepEqual(
-        iterator.next().value,
-        call(Api.fetch, '/products'),
-        'fetchProducts should yield an Effect call(Api.fetch, ./products)'
-    )
+    console.log('>>>>>>>>>>>>>>> :-0')
 
     assert.end()
 })
-*/
